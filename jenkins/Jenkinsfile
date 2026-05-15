@@ -9,7 +9,7 @@ pipeline {
         SONAR_HOST_URL  = 'http://sonarqube:9000'
         SONAR_TOKEN     = credentials('sonar-token')
         ZAP_HOST        = 'http://owasp-zap:8090'
-        ZAP_API_KEY     = 'zap-api-key'
+        ZAP_API_KEY     = '8f9b4b67-519a-41e9-a351-c5d5cc521a3b'
         TARGET_URL      = 'http://sample-app:8080'
         DOCKER_IMAGE    = "myapp:${BUILD_NUMBER}"
         REGISTRY        = 'registry.example.com'
