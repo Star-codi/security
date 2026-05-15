@@ -1,0 +1,51 @@
+groups:
+  - name: owasp_security_alerts
+    rules:
+
+      - alert: HighVulnerabilityCount
+        expr: sonarqube_vulnerabilities > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: OWASP-A06
+        annotations:
+          summary: "High number of vulnerabilities detected"
+          description: "SonarQube reports {{ $value }} vulnerabilities (OWASP A06: Vulnerable Components)"
+
+      - alert: CriticalSecurityHotspot
+        expr: sonarqube_security_hotspots_reviewed < 80
+        for: 10m
+        labels:
+          severity: warning
+          category: OWASP-A05
+        annotations:
+          summary: "Security hotspot review rate below threshold"
+          description: "Only {{ $value }}% of security hotspots reviewed (OWASP A05: Security Misconfiguration)"
+
+      - alert: ZAPHighRiskAlerts
+        expr: zap_alerts_high > 0
+        for: 1m
+        labels:
+          severity: critical
+          category: OWASP-A03
+        annotations:
+          summary: "OWASP ZAP detected high-risk vulnerabilities"
+          description: "{{ $value }} high-risk alerts found — check for injection/XSS (OWASP A03)"
+
+      - alert: JenkinsBuildSecurityFailed
+        expr: jenkins_builds_failed_build_count_total > 3
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Multiple Jenkins security pipeline failures"
+          description: "{{ $value }} pipeline failures — possible security gate rejections"
+
+      - alert: SonarQualityGateFailed
+        expr: sonarqube_quality_gate_status == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "SonarQube Quality Gate FAILED"
+          description: "Build rejected by SonarQube quality gate — review code smells and security issues"

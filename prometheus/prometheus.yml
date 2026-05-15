@@ -1,0 +1,45 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    monitor: 'devsecops-monitor'
+
+rule_files:
+  - "owasp_alerts.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+scrape_configs:
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'jenkins'
+    metrics_path: '/prometheus'
+    static_configs:
+      - targets: ['jenkins:8080']
+
+  - job_name: 'sonarqube'
+    metrics_path: '/api/monitoring/metrics'
+    static_configs:
+      - targets: ['sonarqube:9000']
+    bearer_token: 'YOUR_SONAR_TOKEN'
+
+  - job_name: 'owasp-zap'
+    metrics_path: '/JSON/core/view/stats/'
+    params:
+      apikey: ['zap-api-key']
+    static_configs:
+      - targets: ['owasp-zap:8090']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
